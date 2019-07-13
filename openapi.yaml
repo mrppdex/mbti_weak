@@ -1,0 +1,72 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Swagger ReST Article
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /api
+
+# Paths supported by the server application
+paths:
+  /nr:
+    get:
+      operationId: query.show_stuff
+      tags:
+        - Test stuff
+      summary: Does nothing
+      description: Does nothing. Used for testing.
+      parameters:
+        - name: nr
+          in: query
+          type: integer
+          description: Number
+          required: false
+      responses:
+        200:
+          description: Successfull operation
+          schema:
+            type: array
+            items:
+              properties:
+                nr_name:
+                  type: int
+
+    post:
+      operationId: query.add_number
+      tags:
+        - numbers
+      summary: Add number
+      description: Add number to the list
+      parameters:
+        - name: number
+          in: body
+          description: Number to create
+          required: True
+          schema:
+            type: object
+            properties:
+              nr_name:
+                type: string
+                description: First name of person to create
+      responses:
+        201:
+          description: Successfully created person in list
+
+    delete:
+      operationId: query.delete
+      tags:
+        - numbers
+      summary: Delete a person from the people list
+      description: Delete a person
+      parameters:
+        - name: nr_name
+          in: path
+          type: int
+          required: True
+      responses:
+        200:
+          description: Successfully deleted a person from people list
