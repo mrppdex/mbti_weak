@@ -23,7 +23,11 @@ import pickle
 MAX_NUM_WORDS = 20000
 MAX_SEQUENCE_LENGTH = 1500
 
-sample_text = "hi all. i'm an extrovert and I don't like to be pushed around"
+#sample_text = "hi all. i'm an extrovert and I don't like to be pushed around"
+
+sample_text = '''
+You, like your hero Trump, are a person of very limited intelligence if you cannot see that there is a compassionate middle ground in dealing with migration. Migration needs compassionate controls. How many of the Nutters-clan are in the UK or USA? I will wager that, like most Irish families, the number is high. Or perhaps you think the Nutter-clan are somehow different because they are Caucasian and not South American or African?
+'''
 
 try:
     with open("tfid_vectorizer.pkl", "rb") as tf:
@@ -194,4 +198,8 @@ def preprocess_pipeline(text):
 
 feature = preprocess_pipeline(sample_text)
 print(f"shape: {feature.shape}")
-print(f"content: {feature}")
+
+from keras.models import load_model
+model = load_model("dense_model.h5")
+pred = model.predict(feature[None, :])
+print("Prediction: ", pred)

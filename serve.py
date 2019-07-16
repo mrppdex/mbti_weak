@@ -1,29 +1,25 @@
-"""
-Main module of the server file
-"""
+from flask import Flask, escape, request, render_template
+import sys, os
 
-# 3rd party moudles
-from flask import render_template
-import connexion
+sys.path.append(os.path.realpath(os.path.curdir))
 
+from pipe2 import mtbi_inference
 
-# create the application instance
-app = connexion.App(__name__, specification_dir="./")
+app = Flask(__name__)
 
-# Cead the swagger.yml file to configure the endpoints
-app.add_api("openapi.yaml")
-
-
-# Create a URL route in our application for "/"
 @app.route("/")
 def home():
-    """
-    This function just responds to the browser URL
-    localhost:5000/
+  return render_template("index.html")
 
-    :return:        the rendered template "home.html"
-    """
-    return render_template("home.html")
+@app.route("/mbti", methods=['POST'])
+def mbti_inference():
+  text = escape(request.form['text'])
+  ptypes = ["Extrovert", "Introvert"]
+  inference_object = mtbi_inference(text, types=ptypes)
+  pred = inference_object.predict()
+  del inference_object
+  return f"You are {max(pred, 1-pred)*100:.2f}% {ptypes[int(pred>=0.5)]}..."
+  
 
 
 if __name__ == "__main__":
